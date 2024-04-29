@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+
+  gen_ai:
+    container_name: gen_ai_train
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    privileged: true
+    restart: always
+    volumes:
+      - ./dataset:/home/cescg/dataset
+      - ./notebooks:/home/cescg/notebooks
+      - ./source:/home/cescg/source
+    ports:
+      - "8888:8888"
+    networks:
+      - cescg-train
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          cpus: '8.0'
+          memory: 32G
+    working_dir: /home/cescg
+    entrypoint: python3 -m jupyter notebook --ip=0.0.0.0 --port=8888 --NotebookApp.token='cescg' --allow-root
+
+networks:
+  cescg-train:

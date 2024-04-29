@@ -1,0 +1,13 @@
+numpy
+matplotlib
+opencv-python
+opencv-contrib-python
+jupyter
+notebook
+tqdm
+pandas
+ipdb
+lmdb
+scikit-image
+easing-functions
+scipy
